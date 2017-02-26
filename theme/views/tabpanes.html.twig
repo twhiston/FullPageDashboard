@@ -1,0 +1,16 @@
+<!-- Tab panes -->
+<div class="tab-content">
+    {% for key, url in urls %}
+        {% if key == 0 %}
+            {% set active = "active" %}
+        {% else %}
+            {% set active = "" %}
+        {% endif %}
+        <div role="tabpanel" class="tab-pane "{{ active }} id="url"{{ key }}>
+            <iframe src={{ url.url }} id="frame-"{{ key }}
+                    style="width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;z-index: 0;">
+                Your browser doesn't support iframes
+            </iframe>
+        </div>
+    {% endfor %}
+</div>

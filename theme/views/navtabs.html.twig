@@ -1,0 +1,35 @@
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+    {% if urls|length > 1 %}
+        <li>
+            <a href="javascript:void(0)" onclick="changeCounter()">
+                <input type="text" id="counter" class="dial">
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)">
+                <span id="pause-btn" onclick="stop()" class="glyphicon glyphicon-pause"></span>
+                <span id="play-btn" onclick="play()" class="glyphicon glyphicon-play hidden"></span>
+            </a>
+        </li>
+    {% endif %}
+    {% for key, url in urls %}
+
+        {% if key == 0 %}
+            <li role="presentation" class="active">
+        {% else %}
+            <li role="presentation" >
+        {% endif %}
+        <a href="#url"{{ key }}
+           aria-controls="url"{{ key }} role="tab"
+           data-toggle="tab">{{ url.title }}</a></li>
+    {% endfor %}
+    <li role="presentation"><a href="javascript:void(0)" data-toggle="modal" data-target="#addModal"
+                               aria-controls="add" role="tab" data-toggle="tab">+</a></li>
+    {% if urls|length > 1 %}
+        <li role="presentation" class="pull-right" style="margin-top: 2px;"><a href="javascript:void(0)"
+                                                                               onclick="deleteUrl()">
+                <span id="play-btn" class="glyphicon glyphicon-trash"></span>
+            </a></li>
+    {% endif %}
+</ul>
