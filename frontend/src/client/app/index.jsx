@@ -1,13 +1,12 @@
 import React from 'react';
 import {render} from 'react-dom';
-import AwesomeComponent from './AwesomeComponent.jsx';
+import TabComponent from './TabComponent.jsx';
 
 class App extends React.Component {
     render () {
         return (
             <div>
-                <p> Hello React!</p>
-                <AwesomeComponent />
+                <TabComponent />
             </div>
         );
     }
