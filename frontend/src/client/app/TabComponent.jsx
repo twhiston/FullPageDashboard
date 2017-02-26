@@ -39,17 +39,39 @@ class TabComponent extends React.Component {
         super(props);
         this.state = {
             urls: [],
-            activeMenuItemUid: 0
+            activeMenuItemUid: 0,
+            secondsElapsed: 0,
+            loopTime: 50,
+            apiSettings: {
+                rotate_speed: 60
+            }
         };
         this.setActiveMenuItem = this.setActiveMenuItem.bind(this);
+        this.tick = this.tick.bind(this);
+    }
+
+    tick() {
+        this.setState({secondsElapsed: this.state.secondsElapsed + 1});
+        if (this.state.secondsElapsed % this.state.apiSettings.rotate_speed == 0) {
+            if (this.state.activeMenuItemUid < this.state.urls.length - 1) {
+                this.setState({activeMenuItemUid: this.state.activeMenuItemUid + 1});
+            } else {
+                this.setState({activeMenuItemUid: 0});
+            }
+        }
     }
 
     componentDidMount() {
-        this.setState({urls: this.getUrlsFromApiAsync()});
+        this.getUrlsFromApiAsync();
+        this.getSettingsFromApiAsync();
+        this.interval = setInterval(this.tick, 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     getUrlsFromApiAsync() {
-        console.log(Globals.api_endpoint);
         return fetch(Globals.api_endpoint + '/api/urls')
             .then((response) => response.json())
             .then((responseJson) => {
@@ -60,9 +82,20 @@ class TabComponent extends React.Component {
             });
     }
 
+    getSettingsFromApiAsync() {
+        return fetch(Globals.api_endpoint + '/api/settings')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log("RESPONSE");
+                this.setState({apiSettings: responseJson.settings});
+                console.log(this.state.apiSettings);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
     setActiveMenuItem(uid) {
-        console.log('set active in parent called');
-        console.log(uid);
         this.setState({activeMenuItemUid: uid});
     }
 
@@ -73,7 +106,7 @@ class TabComponent extends React.Component {
 
         //Build tabs
         var tabs = [];
-        this.state.urls.forEach(function (url,key) {
+        this.state.urls.forEach(function (url, key) {
             tabs.push(<MenuItem active={(this.state.activeMenuItemUid == key)} key={key}
                                 onSelect={this.setActiveMenuItem} uid={url.title} selectKey={key}/>);
         }, this);
@@ -105,7 +138,6 @@ class MenuItem extends React.Component {
     render() {
         let className = this.props.active ? 'active' : null;
         let styling = this.props.active ? tabTextActiveStyle : tabTextStyle;
-        console.log(this.props);
         let href = "#" + this.props.uid;
         return (
             <a href={href} style={styling} className={className} onClick={this.handleClick}>{this.props.uid}</a>

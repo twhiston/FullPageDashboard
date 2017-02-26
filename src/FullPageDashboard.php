@@ -131,7 +131,10 @@ class FullPageDashboard {
 
     $app->get('/api/settings',
       function (Application $app, Request $request) {
-        return new JsonResponse(['urls' => $app['vars']['config']['settings']]);
+        return new JsonResponse([
+                                  'status'   => 'success',
+                                  'settings' => $this->app['vars']['config']['settings'],
+                                ]);
       });
 
     $app->post('/api/settings',
