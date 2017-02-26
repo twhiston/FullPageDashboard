@@ -1,0 +1,7 @@
+urls:
+    -
+        title: Jira
+        url: 'http://jira.pwc-digital.ch'
+    -
+        title: Codeship
+        url: 'http://app.codeship.com'
