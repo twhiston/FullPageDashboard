@@ -1,3 +1,4 @@
 config:
     settings:
         rotate_speed: 60
+        show_tabs: true

@@ -9,6 +9,12 @@ const tabStyle = {
     border: '1px solid #ccc',
     backgroundColor: '#f1f1f1',
 };
+const tabStyleHidden = {
+    display: 'none',
+    overflow: "hidden",
+    border: '1px solid #ccc',
+    backgroundColor: '#f1f1f1',
+};
 
 const tabTextStyle = {
     float: 'left',
@@ -43,7 +49,8 @@ class TabComponent extends React.Component {
             secondsElapsed: 0,
             loopTime: 50,
             apiSettings: {
-                rotate_speed: 60
+                rotate_speed: 60,
+                show_tabs: true
             }
         };
         this.setActiveMenuItem = this.setActiveMenuItem.bind(this);
@@ -113,9 +120,10 @@ class TabComponent extends React.Component {
 
         //Get active url
         let activeUrl = this.state.urls[this.state.activeMenuItemUid].url;
+        let tabStyling = this.state.apiSettings.show_tabs ? tabStyle : tabStyleHidden;
         return (
             <div>
-                <div className="tab-container" style={tabStyle}>{tabs}</div>
+                <div className="tab-container" style={tabStyling}>{tabs}</div>
                 <Iframe url={activeUrl}/>
             </div>
         );
