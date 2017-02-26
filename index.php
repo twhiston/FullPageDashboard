@@ -10,7 +10,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use twhiston\FullPageDashboard\FullPageDashboard;
 
-$app = new FullPageDashboard();
+$app = new FullPageDashboard(TRUE);
 $app->registerServices();
 $app->registerRoutes();
 $app->run();

@@ -48,7 +48,7 @@ class FullPageDashboard {
    *
    * @param $app
    */
-  public function __construct() {
+  public function __construct($debug = FALSE) {
     $this->app = new Application();
 
     $this->app->before(function (Request $request) {
@@ -57,7 +57,7 @@ class FullPageDashboard {
         $request->request->replace(is_array($data) ? $data : []);
       }
     });
-    $this->app['debug'] = TRUE;
+    $this->app['debug'] = $debug;
   }
 
   /**
