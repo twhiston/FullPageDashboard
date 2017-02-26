@@ -3,8 +3,8 @@ urls:
         title: Jira
         url: 'http://jira.pwc-digital.ch/secure/RapidBoard.jspa?rapidView=1&useStoredSettings=true'
     -
-        title: Dashboard
-        url: 'http://jira.pwc-digital.ch/secure/Dashboard.jspa?selectPageId=10301'
+        title: Wallboard
+        url: 'http://jira.pwc-digital.ch/plugins/servlet/Wallboard/?dashboardId=10301'
 #    -
 #        title: Codeship
 #        url: 'https://app.codeship.com/pwc-zurich-drupal?docker=true'

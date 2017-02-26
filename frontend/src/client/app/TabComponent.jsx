@@ -39,6 +39,11 @@ const tabTextActiveStyle = {
     backgroundColor: '#ddd',
 };
 
+const iFrameStyle = {
+    width: '90% !important',
+    height: '90% !important'
+};
+
 class TabComponent extends React.Component {
 
     constructor(props) {
@@ -51,7 +56,11 @@ class TabComponent extends React.Component {
             apiSettings: {
                 rotate_speed: 60,
                 show_tabs: true,
-                poll_for_update: 0
+                poll_for_update: 0,
+                iframe: {
+                    width: '100%',
+                    height: '100%'
+                }
             }
         };
         this.setActiveMenuItem = this.setActiveMenuItem.bind(this);
@@ -59,7 +68,7 @@ class TabComponent extends React.Component {
     }
 
     tick() {
-        
+
         this.setState({secondsElapsed: this.state.secondsElapsed + 1});
 
         //Rotate the active menu item
@@ -134,7 +143,7 @@ class TabComponent extends React.Component {
         return (
             <div>
                 <div className="tab-container" style={tabStyling}>{tabs}</div>
-                <Iframe url={activeUrl}/>
+                <Iframe height={this.state.apiSettings.iframe.height} width={this.state.apiSettings.iframe.width} url={activeUrl}/>
             </div>
         );
     }
