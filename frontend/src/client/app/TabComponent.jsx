@@ -50,7 +50,8 @@ class TabComponent extends React.Component {
             loopTime: 50,
             apiSettings: {
                 rotate_speed: 60,
-                show_tabs: true
+                show_tabs: true,
+                poll_for_update: 0
             }
         };
         this.setActiveMenuItem = this.setActiveMenuItem.bind(this);
@@ -58,7 +59,10 @@ class TabComponent extends React.Component {
     }
 
     tick() {
+        
         this.setState({secondsElapsed: this.state.secondsElapsed + 1});
+
+        //Rotate the active menu item
         if (this.state.secondsElapsed % this.state.apiSettings.rotate_speed == 0) {
             if (this.state.activeMenuItemUid < this.state.urls.length - 1) {
                 this.setState({activeMenuItemUid: this.state.activeMenuItemUid + 1});
@@ -66,6 +70,14 @@ class TabComponent extends React.Component {
                 this.setState({activeMenuItemUid: 0});
             }
         }
+
+        //Pull a new set of urls from the api server
+        if (this.state.apiSettings.poll_for_update != 0) {
+            if (this.state.secondsElapsed % this.state.apiSettings.poll_for_update == 0) {
+                this.getUrlsFromApiAsync();
+            }
+        }
+
     }
 
     componentDidMount() {
@@ -93,9 +105,7 @@ class TabComponent extends React.Component {
         return fetch(Globals.api_endpoint + '/api/settings')
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log("RESPONSE");
                 this.setState({apiSettings: responseJson.settings});
-                console.log(this.state.apiSettings);
             })
             .catch((error) => {
                 console.error(error);
