@@ -1,3 +1,0 @@
-config:
-    site: { title: 'Full Page Dashboard - TOM' }
-    settings: { rotate.speed: 150 }

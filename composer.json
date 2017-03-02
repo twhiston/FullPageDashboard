@@ -4,7 +4,6 @@
     "type": "project",
     "require": {
         "silex/silex": "^2.0",
-        "twig/twig": "^2.1",
         "m1/vars": "dev-silex-v2",
         "symfony/yaml": "^3.2",
         "symfony/expression-language": "^3.2",

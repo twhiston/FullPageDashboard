@@ -9,12 +9,11 @@
 namespace twhiston\FullPageDashboard;
 
 use M1\Vars\Provider\Silex\VarsServiceProvider;
-use M1\Vars\Vars;
 use Silex\Application;
-use Silex\Provider\TwigServiceProvider;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Silex\Provider\ServiceControllerServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Yaml\Yaml;
+use twhiston\FullPageDashboard\Controller\Urls;
+use twhiston\FullPageDashboard\Controller\Settings;
 
 /**
  * Class FullPageDashboard
@@ -38,15 +37,13 @@ class FullPageDashboard {
    */
   protected $cachePath = __DIR__ . '/../cache';
 
-  /**
-   * @var string
-   */
-  protected $themePath = __DIR__ . '/../theme';
 
   /**
    * FullPageDashboard constructor.
    *
-   * @param $app
+   * @param bool $debug
+   *
+   * @throws \LogicException
    */
   public function __construct($debug = FALSE) {
     $this->app = new Application();
@@ -75,171 +72,58 @@ class FullPageDashboard {
   }
 
   /**
-   * @param string $themePath
-   */
-  public function setThemePath($themePath) {
-    $this->themePath = $themePath;
-  }
-
-  /**
-   *
+   * Register all app services and controllers
    */
   public function registerServices() {
-    $this->app->register(new VarsServiceProvider($this->configPath),
-                         [
-                           'vars.path'    => $this->configPath,
-                           'vars.options' => [
-                             'cache'         => TRUE,
-                             'cache_path'    => $this->cachePath,
-                             'cache_expire'  => 500,
-                             'loaders'       => [
-                               'yaml',
-                             ],
-                             'merge_globals' => TRUE,
-                           ],
-                         ]);
 
-    $this->app->register(new TwigServiceProvider(),
-                         [
-                           'twig.path' => $this->themePath . '/views',
-                         ]);
+    $app = $this->app;
+    $configPath = $this->configPath;
+    $app->register(new VarsServiceProvider($this->configPath),
+                   [
+                     'vars.path'    => $this->configPath,
+                     'vars.options' => [
+                       'cache'         => TRUE,
+                       'cache_path'    => $this->cachePath,
+                       'cache_expire'  => 500,
+                       'loaders'       => [
+                         'yaml',
+                       ],
+                       'merge_globals' => TRUE,
+                     ],
+                   ]);
+    $app->register(new ServiceControllerServiceProvider());
+
+    $app['api.urls'] = function () use ($configPath) {
+      return new Urls($configPath);
+    };
+    $app['api.settings'] = function () use ($configPath) {
+      return new Settings($configPath);
+    };
   }
 
   /**
-   *
+   * Register all the app routes
    */
   public function registerRoutes() {
 
     $app = $this->app;
 
-    //Main view display
-    $app->get('/',
-      function () use ($app) {
-        $vars = $app['vars']->getContent();
-        return $app['twig']->render('index.html.twig',
-                                    [
-                                      'site'     => $vars['config']['site'],
-                                      'settings' => $vars['config']['settings'],
-                                      'urls'     => $vars['urls'],
-                                    ]
-        );
-      });
-
     /**
      * API Routes
      */
+    //Settings
+    $app->get('/api/settings', 'api.settings:get');
+    $app->post('/api/settings', 'api.settings:set')->when("request.headers.get('Content-Type') === 'application/json'");
 
-    $app->get('/api/settings',
-      function (Application $app, Request $request) {
-        return new JsonResponse([
-                                  'status'   => 'success',
-                                  'settings' => $this->app['vars']['config']['settings'],
-                                ]);
-      });
-
-    $app->post('/api/settings',
-      function (Application $app, Request $request) {
-        $data = $request->request->all();
-        $merged = array_merge($this->app['vars']['config']['settings'], $data);
-
-        /** @var Vars $vars */
-        $vars = $this->app['vars'];
-        $vars->set('config.settings', $merged);
-
-        $output = Yaml::dump(['config' => $vars->get('config')], 3);
-
-        if (file_put_contents($this->configPath . '/config.yml', $output) === FALSE) {
-          return new JsonResponse(['status' => 'fail', 'message' => 'Failed to write output file']);
-        }
-        return new JsonResponse([
-                                  'status'   => 'success',
-                                  'settings' => $this->app['vars']['config']['settings'],
-                                ]);
-      })->when("request.headers.get('Content-Type') === 'application/json'");
-
-    /**
-     * Get all urls
-     */
-    $app->get('/api/urls',
-      function (Application $app, Request $request) {
-        return new JsonResponse(['urls' => $app['vars']['urls']]);
-      });
-
-    /**
-     * Add a url
-     */
-    $app->post('/api/urls/add',
-      function (Application $app, Request $request) {
-        $data = $request->request->all();
-        /** @var Vars $vars */
-        $vars = $this->app['vars'];
-
-        //TODO - Validate urls
-        $merged = array_merge($vars->get('urls'), $data['urls']);
-        $vars->set('urls', $merged);
-        $output = Yaml::dump(['urls' => $vars->get('urls')], 3);
-        if (file_put_contents($this->configPath . '/urls.yml', $output) === FALSE) {
-          return new JsonResponse(['status' => 'fail', 'message' => 'Failed to write output file']);
-        }
-        return new JsonResponse([
-                                  'status' => 'success',
-                                  'urls'   => $this->app['vars']['urls'],
-                                ]);
-      })->when("request.headers.get('Content-Type') === 'application/json'");
-
-    /**
-     * Delete a url
-     */
-    $app->delete('/api/urls/delete/{title}',
-      function (Application $app, Request $request, string $title) {
-        /** @var Vars $vars */
-        $vars = $app['vars'];
-
-        $urls = $vars->get('urls');
-        $id = self::inArray($title, $urls);
-        if (!$id) {
-          return new JsonResponse(['status' => 'fail', 'message' => $title . ' does not exist']);
-        }
-        unset($urls[$id]);
-        $vars->set('urls', array_values($urls));
-
-        $output = Yaml::dump(['urls' => $vars->get('urls')]);
-        if (file_put_contents($this->configPath . '/urls.yml', $output) === FALSE) {
-          return new JsonResponse(['status' => 'fail', 'message' => 'Failed to write output file']);
-        }
-        return new JsonResponse([
-                                  'status' => 'success',
-                                  'urls'   => $this->app['vars']['urls'],
-                                ]);
-
-      });
+    //Urls
+    $app->get('/api/urls','api.urls:get');
+    $app->post('/api/urls/add', 'api.urls:create')->when("request.headers.get('Content-Type') === 'application/json'");//Deprecated
+    $app->post('/api/urls/create', 'api.urls:create')->when("request.headers.get('Content-Type') === 'application/json'");
+    $app->delete('/api/urls/delete/{title}','api.urls:delete');
   }
 
   /**
-   * @param $needle
-   * @param $haystack
-   *
-   * @return int|null|string
-   */
-  public static function inArray($needle, &$haystack) {
-    $found = NULL;
-    foreach ($haystack as $key => $item) {
-      if ($item === $needle) {
-        $found = $key;
-        break;
-      } elseif (is_array($item)) {
-        $found = self::inArray($needle, $item);
-        if ($found !== NULL) {
-          $found = $key;
-          break;
-        }
-      }
-    }
-    return $found;
-  }
-
-  /**
-   *
+   * Proxy to run the app
    */
   public function run() {
     return $this->app->run();
