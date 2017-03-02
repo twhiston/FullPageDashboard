@@ -12,6 +12,7 @@ use M1\Vars\Provider\Silex\VarsServiceProvider;
 use Silex\Application;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
+use twhiston\FullPageDashboard\Controller\Cache;
 use twhiston\FullPageDashboard\Controller\Settings;
 use twhiston\FullPageDashboard\Controller\Urls;
 
@@ -82,6 +83,7 @@ class FullPageDashboard {
 
     $app = $this->app;
     $configPath = $this->configPath;
+    $cachePath = $this->cachePath;
     $app->register(new VarsServiceProvider($this->configPath),
                    [
                      'vars.path'    => $this->configPath,
@@ -102,6 +104,9 @@ class FullPageDashboard {
     };
     $app['api.settings'] = function () use ($configPath) {
       return new Settings($configPath);
+    };
+    $app['api.cache'] = function () use ($cachePath) {
+      return new Cache($cachePath);
     };
   }
 
@@ -126,6 +131,8 @@ class FullPageDashboard {
     $app->post('/api/urls/create', 'api.urls:create')
         ->when("request.headers.get('Content-Type') === 'application/json'");
     $app->delete('/api/urls/delete/{title}', 'api.urls:delete');
+
+    $app->get('/api/cache/clear', 'api.cache:clear');
   }
 
   /**
