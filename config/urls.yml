@@ -1,4 +1,22 @@
 urls:
-    - { title: Jira, url: 'http://jira.pwc-digital.ch/secure/RapidBoard.jspa?rapidView=1&useStoredSettings=true' }
-    - { title: Wallboard, url: 'http://jira.pwc-digital.ch/plugins/servlet/Wallboard/?dashboardId=10301' }
-    - { title: Kibana, url: 'https://addc076912b6f6a19c490930dcd43f71.eu-west-1.aws.found.io/app/kibana#/dashboard/S-GE?_g=(refreshInterval:(%27$$hashKey%27:%27object:325%27,display:%2730%20seconds%27,pause:!f,section:1,value:30000),time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!t),panels:!((col:1,id:Commits,panelIndex:2,row:1,size_x:8,size_y:4,type:visualization),(col:9,id:Success-Failure,panelIndex:1,row:3,size_x:4,size_y:4,type:visualization),(col:1,id:Branch-with-most-commits,panelIndex:3,row:7,size_x:12,size_y:5,type:visualization),(col:9,id:Most-Painful-Branches,panelIndex:4,row:1,size_x:4,size_y:2,type:visualization)),query:(query_string:(analyze_wildcard:!t,query:%27*%27)),title:S-GE,uiState:(P-1:(vis:(legendOpen:!t))))' }
+    -
+        title: Jira
+        url: 'http://jira.pwc-digital.ch/secure/RapidBoard.jspa?rapidView=1&useStoredSettings=true'
+    -
+        title: Wallboard
+        url: 'http://jira.pwc-digital.ch/plugins/servlet/Wallboard/?dashboardId=10301'
+    -
+        title: Kibana
+        url: 'https://addc076912b6f6a19c490930dcd43f71.eu-west-1.aws.found.io/app/kibana#/dashboard/S-GE?_g=(refreshInterval:(%27$$hashKey%27:%27object:325%27,display:%2730%20seconds%27,pause:!f,section:1,value:30000),time:(from:now-5y,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!t),panels:!((col:1,id:Commits,panelIndex:2,row:1,size_x:8,size_y:4,type:visualization),(col:9,id:Success-Failure,panelIndex:1,row:3,size_x:4,size_y:4,type:visualization),(col:1,id:Branch-with-most-commits,panelIndex:3,row:7,size_x:12,size_y:5,type:visualization),(col:9,id:Most-Painful-Branches,panelIndex:4,row:1,size_x:4,size_y:2,type:visualization)),query:(query_string:(analyze_wildcard:!t,query:%27*%27)),title:S-GE,uiState:(P-1:(vis:(legendOpen:!t))))'
+    -
+        title: test
+        url: 'http://www.dingus.com'
+    -
+        title: test2
+        url: 'http://www.dongus.com'
+    -
+        title: test
+        url: 'http://www.google.com'
+    -
+        title: test2
+        url: 'http://www.wikipedia.com'

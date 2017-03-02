@@ -1,6 +1,6 @@
 config:
     settings:
         rotate_speed: 50
-        show_tabs: '1'
-        poll_for_update: '60'
+        show_tabs: true
+        poll_for_update: 60
         iframe: { width: 100%, height: 99% }
