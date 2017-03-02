@@ -10,6 +10,4 @@ require_once __DIR__ . '/vendor/autoload.php';
 use twhiston\FullPageDashboard\FullPageDashboard;
 
 $app = new FullPageDashboard();//Pass in true if you want dev mode (nocache)
-$app->registerServices();
-$app->registerRoutes();
 $app->run();
