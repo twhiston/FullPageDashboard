@@ -1,6 +1,6 @@
 class Globals {
     constructor() {
-        this.api_endpoint = 'http://fpd.dev';
+        this.api_endpoint = 'http://localhost';
     }
 }
 
