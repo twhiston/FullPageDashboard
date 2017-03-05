@@ -1,5 +1,5 @@
 import React from "react";
-import Globals from "./globals.jsx";
+import '../globals';
 
 var classnames = require('classnames');
 var Iframe = require("react-iframe");
@@ -100,7 +100,7 @@ class TabComponent extends React.Component {
     }
 
     getUrlsFromApiAsync() {
-        return fetch(Globals.api_endpoint + '/api/urls')
+        return fetch(window.env.API_URL + '/api/urls')
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setState({urls: responseJson.urls});
@@ -111,7 +111,7 @@ class TabComponent extends React.Component {
     }
 
     getSettingsFromApiAsync() {
-        return fetch(Globals.api_endpoint + '/api/settings')
+        return fetch(window.env.API_URL + '/api/settings')
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setState({apiSettings: responseJson.settings});
