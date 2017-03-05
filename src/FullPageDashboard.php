@@ -124,6 +124,11 @@ class FullPageDashboard {
     /**
      * API Routes
      */
+
+    $app->get('/',
+      function () use ($app) {
+        return $app->json(['status' => 'ok'], 200);
+      });
     //Settings
     $app->get('/api/settings', 'api.settings:get');
     $app->post('/api/settings', 'api.settings:set')->when("request.headers.get('Content-Type') === 'application/json'");

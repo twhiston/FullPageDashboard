@@ -18,3 +18,8 @@ This will be sorted asap
 
 A react application compiled by webpack, this is super simple at the moment.
 If you want to contribute to this repo then this would be an ideal place
+
+
+## TODO
+
+- api root endpoint for ping status
