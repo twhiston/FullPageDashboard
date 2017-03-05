@@ -59,6 +59,9 @@ class FullPageDashboard {
         $request->request->replace(is_array($data) ? $data : []);
       }
     });
+    $this->app->after(function (Request $request, Response $response) {
+      $response->headers->set('Access-Control-Allow-Origin', '*');
+    });
     $this->app['debug'] = $debug;
   }
 
