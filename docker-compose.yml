@@ -1,0 +1,38 @@
+########################################################################################################################
+# PwC's Experience Center Zurich - FPD Local Development docker-compose file
+#
+# This config is specific to using the dm docker for mac development tool
+########################################################################################################################
+
+version: "2"
+
+services:
+  app:
+  # Local development image,
+  # This is based on our generic drupal s2i image, which is used for Openshift builds
+    image: pwcsexperiencecenter/drupal-base:local
+    container_name: fpd
+    volumes:
+    # link the whole project into the image at the appropriate point.
+    # This allows nginx in the container to serve the correct files
+    # Because dockers mounts our /Users folder this is reading directly from our local machine
+      - ./:/opt/app-root/src/app/docroot
+#    ports:
+#      - 8000:8000
+    networks:
+      - dm_bridge
+    environment:
+        # Needed for xdebug
+      - PHP_IDE_CONFIG="serverName=dev"
+        # Needed for command line utils, e.g. clear
+      - TERM=xterm
+      - VIRTUAL_HOST=fpd.dev
+
+########################################################################################################################
+# Networks
+#
+# If you use dm you must link the dm_bridge network in your app to allow connection to mariadb, selenium etc....
+########################################################################################################################
+networks:
+  dm_bridge:
+    external: true
