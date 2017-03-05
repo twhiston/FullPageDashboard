@@ -22078,7 +22078,7 @@ var App = function (_React$Component) {
 
 window.env = {
     // This option can be retrieved in "src/index.js" with "window.env.API_URL".
-    API_URL: 'http://fpd.dev/index.php'
+    API_URL: 'http://localhost/index.php'
 };
 
 /***/ })
