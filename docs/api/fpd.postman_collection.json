@@ -1,0 +1,195 @@
+{
+	"variables": [],
+	"info": {
+		"name": "fpd",
+		"_postman_id": "d3ca9391-4e6f-9fd0-9d98-7c076d7dd095",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://fpd.dev/settings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Status Pass\"] = jsonData.status === \"success\";",
+							"",
+							"tests[\"Setting: RotateSpeed\"] = jsonData.settings.rotate_speed === 50;",
+							"tests[\"Setting: ShowTabs\"] = jsonData.settings.show_tabs === true;",
+							"tests[\"Setting: UpdatePoll\"] = jsonData.settings.poll_for_update === 60;",
+							"tests[\"Setting: iframe Width\"] = jsonData.settings.iframe.width === \"100%\";",
+							"tests[\"Setting: iframe Height\"] = jsonData.settings.iframe.height === \"99%\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://fpd.dev/api/settings",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rotate_speed\": 50,\n    \"show_tabs\": true,\n    \"poll_for_update\": 60,\n    \"iframe\": {\n      \"width\": \"100%\",\n      \"height\": \"99%\"\n    }\n}"
+				},
+				"description": "post a Json array of settings to the FullPageDesktop.\nCurrently available settings:\n\trotate_speed: int|string\n\tshow_tabs: bool\n\tpoll_for_update: int|string\n\tiframe: {\n\t\twidth: string\n\t\theight: string\n\t}"
+			},
+			"response": []
+		},
+		{
+			"name": "http://fpd.dev/api/settings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Status Pass\"] = jsonData.status === \"success\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://fpd.dev/api/settings",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Returns all settings values"
+			},
+			"response": []
+		},
+		{
+			"name": "http://fpd.dev/api/url",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Status Pass\"] = jsonData.status === \"success\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://fpd.dev/api/urls",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://fpd.dev/api/url/add",
+			"request": {
+				"url": "http://fpd.dev/api/urls/add",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"urls\": [\n\t{\n\t\t\"title\": \"test\",\n\t\t\"url\": \"http://www.dingus.com\"\n\t},\n\t{\n\t\t\"title\": \"test2\",\n\t\t\"url\": \"http://www.dongus.com\"\n\t}\n\t]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://fpd.dev/api/url/create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Status Pass\"] = jsonData.status === \"success\";",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://fpd.dev/api/urls/create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"urls\": [\n\t{\n\t\t\"title\": \"test\",\n\t\t\"url\": \"http://www.google.com\"\n\t},\n\t{\n\t\t\"title\": \"test2\",\n\t\t\"url\": \"http://www.wikipedia.com\"\n\t}\n\t]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://fpd.dev/api/url/delete/test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Status Pass\"] = jsonData.status === \"success\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://fpd.dev/api/urls/delete/test",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://fpd.dev/api/cache/clear",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Status Pass\"] = jsonData.status === \"success\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://fpd.dev/api/cache/clear",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
